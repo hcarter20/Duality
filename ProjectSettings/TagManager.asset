@@ -8,6 +8,7 @@ TagManager:
   - Hazard
   - PlayerAttack
   - Enemy
+  - Box
   layers:
   - Default
   - TransparentFX
@@ -16,11 +17,11 @@ TagManager:
   - Water
   - UI
   - Player
-  - Black
-  - White
-  - Player-Black
-  - Player-White
   - 
+  - 
+  - 
+  - 
+  - Box
   - 
   - 
   - 

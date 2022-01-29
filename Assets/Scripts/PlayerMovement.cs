@@ -6,14 +6,18 @@ public class PlayerMovement : MonoBehaviour
 {
     public string InputAxis;
     public string InputJump;
+    public string InputDrag;
     public CharacterController2D controller;
     public float speed;
+    public float dragSpeed;
+    public bool black;
 
     // private Animator animator;
     
     private float horizontalMove = 0.0f;
     private bool jump = false;
 
+    private BoxMovement grabbedBox;
 
     private void Start()
     {
@@ -22,12 +26,32 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // player shouldn't be able to move outside of playing state
+        // todo: player shouldn't be able to move during cutscenes
+        // todo: stop dragging if no longer touching the ground
 
-        horizontalMove = Input.GetAxisRaw(InputAxis) * speed;
+        if (Input.GetButtonUp(InputDrag))
+        {
+            if (grabbedBox != null)
+            {
+                grabbedBox.transform.parent = null;
+                grabbedBox = null;
+                Debug.Log("Box is released.");
+            }
+        }
 
-        if (Input.GetButtonDown(InputJump))
-            jump = true;
+        if (grabbedBox != null)
+        {
+            // when dragging, speed is reduced
+            horizontalMove = Input.GetAxisRaw(InputAxis) * dragSpeed;
+        }
+        else
+        {
+            horizontalMove = Input.GetAxisRaw(InputAxis) * speed;
+
+            // can only jump if not dragging
+            if (Input.GetButtonDown(InputJump))
+                jump = true;
+        }
 
         // get the approximate direction
         // float ourSpeed = Input.GetAxis("Horizontal");
@@ -45,19 +69,39 @@ public class PlayerMovement : MonoBehaviour
         }
         */
 
-        // move the player in the fixed update
-        controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump);
-
-        /*
-        if (jump)
+        if (grabbedBox != null)
         {
-            // make a jump sound
-            SoundManager.S.PlayJumpSound();
+            // Check if we're moving opposite direction of facing
+            float move = horizontalMove * Time.fixedDeltaTime;
 
-            // start jump animation
-            animator.SetBool("isOnGround", false);
+            if ((move > 0 && !controller.m_FacingRight) || (move < 0 && controller.m_FacingRight))
+            {
+                if (black)
+                {
+                    controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false);
+                }
+                else
+                {
+                    Debug.Log("White cat cannot pull.");
+                }
+            }
+            else
+            {
+                if (!black)
+                {
+                    controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false);
+                }
+                else
+                {
+                    Debug.Log("Black cat cannot push.");
+                }
+            }
         }
-        */
+        else
+        {
+            // move the player in the fixed update
+            controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, true);
+        }
 
         // reset the jump flag
         jump = false;
@@ -75,12 +119,21 @@ public class PlayerMovement : MonoBehaviour
         */
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
-    }
-
-    /* The head of the enemy is a trigger, the body of the enemy is a rigidbody */
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
+        if (collision.gameObject.CompareTag("Box"))
+        {
+            // see if the player is trying to drag a box
+            if (Input.GetButton(InputDrag))
+            {
+                // Tell the box that we're paired
+                grabbedBox = collision.gameObject.GetComponent<BoxMovement>();
+                if (grabbedBox != null)
+                {
+                    grabbedBox.Grab();
+                    grabbedBox.transform.parent = transform;
+                }
+            }
+        }
     }
 }
