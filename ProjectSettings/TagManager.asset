@@ -4,10 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - TurnAround
-  - Hazard
-  - PlayerAttack
-  - Enemy
   - Box
   layers:
   - Default
@@ -17,11 +13,11 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
-  - 
-  - 
-  - 
   - Box
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -43,6 +39,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1416035931
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground
+    uniqueID: 1292843463
     locked: 0
