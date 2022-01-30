@@ -483,6 +483,7 @@ MonoBehaviour:
   m_GroundCheck: {fileID: 1590588671}
   m_CeilingCheck: {fileID: 1990031080}
   m_CrouchDisableCollider: {fileID: 0}
+  m_FacingRight: 1
   OnLandEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -550,8 +551,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputAxis: HorizontalPlayer1
   InputJump: Jump1
+  InputDrag: 
   controller: {fileID: 781580090}
   speed: 30
+  dragSpeed: 0
+  black: 0
 --- !u!1001 &817948377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -679,8 +683,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputAxis: HorizontalPlayer2
   InputJump: Jump2
+  InputDrag: 
   controller: {fileID: 1143964295}
   speed: 30
+  dragSpeed: 0
+  black: 0
 --- !u!61 &1143964293
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -750,6 +757,7 @@ MonoBehaviour:
   m_GroundCheck: {fileID: 1855582221}
   m_CeilingCheck: {fileID: 139825093}
   m_CrouchDisableCollider: {fileID: 0}
+  m_FacingRight: 1
   OnLandEvent:
     m_PersistentCalls:
       m_Calls: []
