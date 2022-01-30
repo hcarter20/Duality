@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class TitleScreen : MonoBehaviour {
     
-    public GameObject Settings
+    public GameObject Settings;
+    public GameObject Title;
 
     public void PlayGame () 
     {
@@ -16,17 +17,18 @@ public class TitleScreen : MonoBehaviour {
 
     public void QuitGame ()
     {
-        Debug.Log("Quit!");
         Application.Quit();
     }
 
     public void SettingsLoad ()
     {
         Settings.SetActive(true);
+        Title.SetActive(false);
     }
 
     public void SettingsReturn ()
     {
+        Title.SetActive(true);
         Settings.SetActive(false);
     }
     
