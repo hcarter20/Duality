@@ -87,6 +87,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, true);
+            SoundManager.S.PlayJumpSound();
         }
 
         // reset the jump flag

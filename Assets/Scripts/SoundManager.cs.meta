@@ -3,7 +3,12 @@ guid: e68f1628963fc6241a651e40d705fcb2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - audioSource: {instanceID: 0}
+  - jumpClip: {fileID: 8300000, guid: 6d52cf42f2ee14cf6a1c9313a79da9f9, type: 3}
+  - coinClip: {fileID: 8300000, guid: 77cf30b66798e4f4880cf2b817e97d0d, type: 3}
+  - pushClip: {fileID: 8300000, guid: cc121dcadb2a54cae8267ec17cbfe1b0, type: 3}
+  - pullClip: {fileID: 8300000, guid: 1309ea603237f4f169f981c5b719b103, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

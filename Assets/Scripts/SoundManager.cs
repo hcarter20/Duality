@@ -7,7 +7,9 @@ public class SoundManager : MonoBehaviour
     public static SoundManager S;
 
     public AudioSource audioSource;
-    public AudioClip jumpClip, hitClip, fallClip, deathClip, coinClip, powerUpClip, checkpointClip, fanfareClip, gameoverClip;
+    public AudioClip jumpClip, coinClip, pushClip, pullClip;
+    
+    // hitClip, fallClip, deathClip, powerUpClip, checkpointClip, fanfareClip, gameoverClip;
 
     private void Awake()
     {
@@ -20,6 +22,22 @@ public class SoundManager : MonoBehaviour
         audioSource.PlayOneShot(jumpClip);
     }
 
+    public void PlayPushSound()
+    {
+        audioSource.PlayOneShot(pushClip);
+    }
+
+    public void PlayPullSound()
+    {
+        audioSource.PlayOneShot(pullClip);
+    }
+
+    public void PlayCoinSound()
+    {
+        audioSource.PlayOneShot(coinClip);
+    }
+
+/*
     public void PlayHitSound()
     {
         audioSource.PlayOneShot(hitClip);
@@ -33,11 +51,6 @@ public class SoundManager : MonoBehaviour
     public void PlayDeathSound()
     {
         audioSource.PlayOneShot(deathClip);
-    }
-
-    public void PlayCoinSound()
-    {
-        audioSource.PlayOneShot(coinClip);
     }
 
     public void PlayPowerUpSound()
@@ -59,4 +72,6 @@ public class SoundManager : MonoBehaviour
     {
         audioSource.PlayOneShot(gameoverClip);
     }
+*/
+
 }

@@ -14,7 +14,7 @@ public class Coin : MonoBehaviour
             PlayerMovement player = collision.gameObject.GetComponent<PlayerMovement>();
 
             // play the coin collection sound
-            // SoundManager.S.PlayCoinSound();
+            SoundManager.S.PlayCoinSound();
 
             // tell GameManager that player collected coin
             GameManager.S.PlayerCollectedCoin();
