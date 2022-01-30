@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private float horizontalMove = 0.0f;
     private bool jump = false;
 
-    private BoxMovement grabbedBox;
+    private BoxMovement grabbedBox = null;
 
     private void Start()
     {
@@ -29,14 +29,11 @@ public class PlayerMovement : MonoBehaviour
         // todo: player shouldn't be able to move during cutscenes
         // todo: stop dragging if no longer touching the ground
 
-        if (Input.GetButtonUp(InputDrag))
+        if (Input.GetButtonUp(InputDrag) && grabbedBox != null)
         {
-            if (grabbedBox != null)
-            {
-                grabbedBox.transform.parent = null;
-                grabbedBox = null;
-                Debug.Log("Box is released.");
-            }
+            grabbedBox.transform.parent = null;
+            grabbedBox.Release();
+            grabbedBox = null;
         }
 
         if (grabbedBox != null)
@@ -73,33 +70,15 @@ public class PlayerMovement : MonoBehaviour
         {
             // Check if we're moving opposite direction of facing
             float move = horizontalMove * Time.fixedDeltaTime;
+            bool pull = (move > 0 && !controller.m_FacingRight) || (move < 0 && controller.m_FacingRight);
 
-            if ((move > 0 && !controller.m_FacingRight) || (move < 0 && controller.m_FacingRight))
+            if ((black && pull) || (!black & !pull))
             {
-                if (black)
-                {
-                    controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false);
-                }
-                else
-                {
-                    Debug.Log("White cat cannot pull.");
-                }
-            }
-            else
-            {
-                if (!black)
-                {
-                    controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false);
-                }
-                else
-                {
-                    Debug.Log("Black cat cannot push.");
-                }
+                controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false);
             }
         }
         else
         {
-            // move the player in the fixed update
             controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, true);
         }
 
@@ -121,17 +100,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Box"))
+        // Check that this box is to our side, not below us
+        float yDiff = transform.position.y - collision.gameObject.transform.position.y;
+
+        if (collision.gameObject.CompareTag("Box") && yDiff < 4.0f)
         {
-            // see if the player is trying to drag a box
-            if (Input.GetButton(InputDrag))
+            // Try to pair with the box
+            if (Input.GetButton(InputDrag) && grabbedBox == null)
             {
-                // Tell the box that we're paired
-                grabbedBox = collision.gameObject.GetComponent<BoxMovement>();
-                if (grabbedBox != null)
+                // Make sure both cats can't pick up at once
+                BoxMovement box = collision.gameObject.GetComponent<BoxMovement>();
+                if (!box.isGrabbed)
                 {
-                    grabbedBox.Grab();
+                    grabbedBox = box;
                     grabbedBox.transform.parent = transform;
+                    grabbedBox.Grab();
                 }
             }
         }
