@@ -40,26 +40,19 @@ public class PlayerMovement : MonoBehaviour
         {
             // when dragging, speed is reduced
             horizontalMove = Input.GetAxisRaw(InputAxis) * dragSpeed;
-            animator.SetBool("isPushPulling", true);
         }
         else
         {
             horizontalMove = Input.GetAxisRaw(InputAxis) * speed;
-            animator.SetBool("isPushPulling", false);
 
             // can only jump if not dragging
             if (Input.GetButtonDown(InputJump))
             {
                 jump = true;
-                animator.SetBool("isJumping", true);
             }
         }
 
         animator.SetBool("isMoving", horizontalMove != 0);
-
-        // get the approximate direction
-        // float ourSpeed = Input.GetAxis("Horizontal");
-        // animator.SetFloat("speed", Mathf.Abs(ourSpeed));
     }
 
     private void FixedUpdate()
@@ -82,29 +75,33 @@ public class PlayerMovement : MonoBehaviour
             if ((black && pull) || (!black & !pull))
             {
                 controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false);
+                animator.SetBool("isPushPulling", true);
             }
         }
         else
         {
             controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, true);
-            SoundManager.S.PlayJumpSound();
+            animator.SetBool("isPushPulling", false);
+
+            if (jump)
+            {
+                SoundManager.S.PlayJumpSound();
+                animator.SetBool("isJumping", false);
+            }
         }
 
         // reset the jump flag
         jump = false;
-        animator.SetBool("isJumping", false);
     }
 
     /* CharacterController2D tends to double-fire the 'OnLanded' event, 
      * but sometimes it works perfectly, so I can't necessarily skip this. */
     public void PlayerLanded()
     {
-        /*
         if (animator != null)
         {
-            animator.SetBool("isOnGround", true);
+            animator.SetBool("isJumping", false);
         }
-        */
     }
 
     private void OnCollisionStay2D(Collision2D collision)
