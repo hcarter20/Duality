@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    // public bool black;
+    public bool collected = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Check if this is black or white cat
-            PlayerMovement player = collision.gameObject.GetComponent<PlayerMovement>();
+            if (!collected)
+            {
+                collected = true;
 
-            // play the coin collection sound
-            SoundManager.S.PlayCoinSound();
+                // play the coin collection sound
+                SoundManager.S.PlayCoinSound();
 
-            // tell GameManager that player collected coin
-            GameManager.S.PlayerCollectedCoin();
+                // tell GameManager that player collected coin
+                GameManager.S.PlayerCollectedCoin();
 
-            // destroy this coin
-            Destroy(gameObject);
+                // destroy this coin
+                Destroy(gameObject);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState { getReady, playing, oops, gameOver, roundWin };
 
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviour
     /* Used internally for tracking gameplay info */
 
     /* Before anything happens, initialization of object */
+
+    public int coinCount = 8;
 
     private void Awake()
     {
@@ -81,11 +84,19 @@ public class GameManager : MonoBehaviour
 
     public void PlayerCollectedCoin()
     {
-        // add to the player's score
-        // score += 100;
+        coinCount--;
 
-        // update the score display
-        // scoreOverlay.text = score.ToString("0000");
+        // Game is over when all coins are gone.
+        if (coinCount < 1)
+        {
+            StartCoroutine(EndGame());
+        }
+    }
+
+    public IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(2.0f);
+        SceneManager.LoadScene("Title");
     }
 
     /* GameState: after playing is over */
